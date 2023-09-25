@@ -4,43 +4,41 @@ from dotenv import load_dotenv
 from Chatbot import Chatbot
 import os
 
+
+
 st.title("Furnace Whisper")
 
 # load the API key from the .env file
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-with st.sidebar:
+# pdfs = st.file_uploader("Upload a PDF", type=["pdf"], accept_multiple_files=True)
+chatbot = Chatbot()
 
-   # pdfs = st.file_uploader("Upload a PDF", type=["pdf"], accept_multiple_files=True)
-    chatbot = Chatbot()
-    
-    docs = chatbot.load_directory("directory/")
-    chunks = chatbot.split_text(docs)
-    vectorstore = chatbot.vectorize(chunks)
-    chain = chatbot.build_chain(vectorstore)
-    
-    st.write("Ready to chat!")
-    st.write("Ask a question below and I'll try to answer it.")
-    question = st.text_input("Question:")
-    if question:
+
+vectorstore = chatbot.vectorize("directory/")
+chain = chatbot.build_chain(vectorstore)
+
+if "conversation" not in st.session_state:
+    st.session_state["conversation"] =  [{"role": "assistant", "content": "How can I help you?"}]
+
+for msg in st.session_state.conversation:
+    st.chat_message(msg["role"]).write(msg["content"])
+
+if "chat_history" not in st.session_state: 
+    st.session_state["chat_history"] = None
+
+if prompt := st.chat_input():
+    st.session_state["conversation"].append({"role": "user", "content": prompt})
+    st.chat_message("user").write(prompt)
+    with st.spinner("Processing"):
         chat_history = []
+        response = chain({"question": prompt,  "chat_history": chat_history})
+        st.session_state.conversation.append({"role": "assistant", "content": response["answer"]})
+        st.chat_message("assistant").write(response["answer"])
+    #st.session_state["chat_history"].append((prompt,response["answer"]))
+   
 
-        response = chain({"question": question,  "chat_history": chat_history})
-        chat_history.append((question, response["answer"]))
-        st.write(response["answer"])
-"""  
-    if pdfs:
-        text = chatbot.load_document(pdfs)
-        chunks = chatbot.split_text(text)
-        vectorstore = chatbot.vectorize(chunks)
-        chain = chatbot.build_chain(vectorstore)
-        st.write("Ready to chat!")
-        st.write("Ask a question below and I'll try to answer it.")
-        question = st.text_input("Question:")
-        if question:
-            chat_history = []
+    
 
-            response = chain({"question": question,  "chat_history": chat_history})
-            chat_history.append((question, response["answer"]))
-            st.write(response["answer"]) """
+
