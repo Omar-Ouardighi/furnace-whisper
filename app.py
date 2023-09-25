@@ -12,7 +12,6 @@ st.title("Furnace Whisper")
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# pdfs = st.file_uploader("Upload a PDF", type=["pdf"], accept_multiple_files=True)
 chatbot = Chatbot()
 
 
@@ -35,9 +34,7 @@ if prompt := st.chat_input():
         chat_history = []
         response = chain({"question": prompt,  "chat_history": chat_history})
         st.session_state.conversation.append({"role": "assistant", "content": response["answer"]})
-        st.chat_message("assistant").write(response["answer"])
-    #st.session_state["chat_history"].append((prompt,response["answer"]))
-   
+        st.chat_message("assistant").write(response["answer"])   
 
     
 

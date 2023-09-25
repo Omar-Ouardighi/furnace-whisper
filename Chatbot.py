@@ -53,5 +53,3 @@ class Chatbot:
         chain = ConversationalRetrievalChain.from_llm(llm = self.llm, retriever = index.vectorstore.as_retriever(search_kwargs={"k": 1}),
                                             return_source_documents=True)
         return chain
-
-    
