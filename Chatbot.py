@@ -2,12 +2,11 @@ import openai
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import DirectoryLoader, PyPDFDirectoryLoader
 from langchain.storage import LocalFileStore
-from langchain.embeddings import OpenAIEmbeddings, CacheBackedEmbeddings
+from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
-from langchain.indexes import VectorstoreIndexCreator
-from langchain.indexes.vectorstore import VectorStoreIndexWrapper
+
 from langchain.prompts.prompt import PromptTemplate
 
 from dotenv import load_dotenv
@@ -18,7 +17,7 @@ import os
 
 class Chatbot:
     def __init__(self):
-        self.splitter = RecursiveCharacterTextSplitter(chunk_size=1000 ,chunk_overlap=100)
+        self.splitter = RecursiveCharacterTextSplitter(chunk_size=700 ,chunk_overlap=100)
         self.underlying_embeddings = OpenAIEmbeddings()
         self.llm = ChatOpenAI(model_name="gpt-3.5-turbo")
 
@@ -55,20 +54,19 @@ class Chatbot:
 
     def vectorize(self, directory):
         
-        if os.path.exists("persist"):           
-            vectorstore = Chroma(persist_directory="persist", embedding_function=self.underlying_embeddings)
-            index = VectorStoreIndexWrapper(vectorstore=vectorstore)
+        if os.path.exists("./persist"):           
+            vectorstore = Chroma(persist_directory="./persist", embedding_function=self.underlying_embeddings)
+            
         else:
             loader = PyPDFDirectoryLoader(directory)
-            index = VectorstoreIndexCreator(vectorstore_kwargs={"persist_directory":"persist"}, 
-                                            text_splitter= self.splitter,
-                                            vectorstore_cls=Chroma,
-                                            embedding=self.underlying_embeddings ).from_loaders([loader])
+            documents = loader.load()
+            chunks = self.splitter.split_documents(documents)
+            vectorstore = Chroma.from_documents(chunks, self.underlying_embeddings, persist_directory="./persist")
 
-        return index
+        return vectorstore
     
-    def build_chain(self, index):
-        chain = ConversationalRetrievalChain.from_llm(llm = self.llm, retriever = index.vectorstore.as_retriever(search_kwargs={"k": 3}),
+    def build_chain(self, vectorstore):
+        chain = ConversationalRetrievalChain.from_llm(llm = self.llm, retriever = vectorstore.as_retriever(search_kwargs={"k": 3}),
                                     combine_docs_chain_kwargs={'prompt': self.QA_PROMPT},
                                             return_source_documents=True)
         return chain
