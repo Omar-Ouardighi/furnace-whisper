@@ -22,7 +22,10 @@ if "conversation" not in st.session_state:
     st.session_state["conversation"] =  [{"role": "assistant", "content": "How can I help you?"}]
 
 for msg in st.session_state.conversation:
-    st.chat_message(msg["role"]).write(msg["content"])
+    if msg["role"] == "user":
+        st.chat_message(msg["role"]).write(msg["content"])
+    else:
+        st.chat_message(msg["role"],avatar="PW LOGO.png").write(msg["content"])
 
 if "chat_history" not in st.session_state: 
     st.session_state["chat_history"] = None
@@ -34,7 +37,7 @@ if prompt := st.chat_input():
         chat_history = []
         response = chain({"question": prompt,  "chat_history": chat_history})
         st.session_state.conversation.append({"role": "assistant", "content": response["answer"]})
-        st.chat_message("assistant").write(response["answer"])   
+        st.chat_message("assistant", avatar="PW LOGO.png").write(response["answer"])   
 
     
 
