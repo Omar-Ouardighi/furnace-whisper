@@ -20,17 +20,19 @@ Before running the app locally, you need to install the required Python packages
    git clone https://github.com/Omar-Ouardighi/furnace-whisper.git
 ```
 
-3. Navigate to the project directory:
+2. Navigate to the project directory:
 ```
   cd your-repository
 ```
 
-5. Install the required packages using `pip`:
+3. Install the required packages using `pip`:
 ```
   pip install -r requirements.txt
 ```
 
-6. Once you have installed the required packages, you can run the Streamlit app locally :
+4. Add your API-key to .env file
+
+5.  Once you have installed the required packages, you can run the Streamlit app locally :
 ```
   streamlit run app.py
 ```
