@@ -17,7 +17,7 @@ import os
 
 class Chatbot:
     def __init__(self):
-        self.splitter = RecursiveCharacterTextSplitter(chunk_size=700 ,chunk_overlap=100)
+        self.splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100)
         self.underlying_embeddings = OpenAIEmbeddings()
         self.llm = ChatOpenAI(model_name="gpt-3.5-turbo")
 
@@ -66,7 +66,7 @@ class Chatbot:
         return vectorstore
     
     def build_chain(self, vectorstore):
-        chain = ConversationalRetrievalChain.from_llm(llm = self.llm, retriever = vectorstore.as_retriever(search_kwargs={"k": 3}),
+        chain = ConversationalRetrievalChain.from_llm(llm = self.llm, retriever = vectorstore.as_retriever(search_kwargs={"k": 2}),
                                     combine_docs_chain_kwargs={'prompt': self.QA_PROMPT},
                                             return_source_documents=True)
         return chain
