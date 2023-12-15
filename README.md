@@ -1,4 +1,4 @@
-# Furnace Whisper
+# ChitChatPDF
 
 ## Table of Contents
 
