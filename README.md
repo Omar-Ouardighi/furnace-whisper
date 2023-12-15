@@ -2,10 +2,10 @@
 
 ## Table of Contents
 
-- [Chatbot Application](#Chatbot_Application)
+- [Chatbot Application](#Chatbot-Application)
 - [Features](#Features)
 - [Requirements](#Requirements)
-- [Docker Usage](#Docker_Usage)
+- [Docker Usage](#Docker-Usage)
 - [Installation](#Installation)
 
 ## Chatbot Application
