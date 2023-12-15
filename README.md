@@ -2,11 +2,13 @@
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Installation](#installation)
+- [Chatbot Application](#Chatbot Application)
+- [Features](#Features)
+- [Requirements](#Requirements)
+- [Docker Usage](#Docker Usage)
+- [Installation](#Installation)
 
-
-# Chatbot Application
+## Chatbot Application
 
 This is a chatbot application built with Python and Streamlit. It uses OpenAI's GPT-3.5-turbo model to generate responses based on the content of uploaded documents.
 
