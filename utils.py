@@ -2,7 +2,7 @@ import streamlit as st
 from dotenv import load_dotenv
 import openai
 import os
-
+import shelve
 load_dotenv()
 
 def sidebar():
@@ -25,12 +25,7 @@ def sidebar():
 
         st.session_state["OPENAI_API_KEY"] = api_key_input
 
-        st.markdown("---")
-        st.markdown("# About")
-        st.markdown(
-            "ChitChatPDF allows you to ask questions about your "
-            "documents and get accurate answers. "
-        )
+     
 
 def is_open_ai_key_valid(openai_api_key) -> bool:
 
@@ -56,3 +51,15 @@ def is_open_ai_key_valid(openai_api_key) -> bool:
         return False
 
     return True
+
+
+# Load chat history from shelve file
+def load_chat_history():
+    with shelve.open("chat_history") as db:
+        return db.get("conversation", [])
+
+
+# Save chat history to shelve file
+def save_chat_history(messages):
+    with shelve.open("chat_history") as db:
+        db["conversation"] = messages
