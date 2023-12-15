@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from Chatbot import Chatbot
 import os
 import utils
+import shelve
 
 
 st.set_page_config(page_title="ChitChatPDF", page_icon="📄")
@@ -61,3 +62,14 @@ if prompt := st.chat_input():
             st.session_state["chat_history"].append((prompt, response["answer"]))
             st.chat_message("assistant", avatar="PW LOGO.png").write(response["answer"])
             
+
+# Load chat history from shelve file
+def load_chat_history():
+    with shelve.open("chat_history") as db:
+        return db.get("messages", [])
+
+
+# Save chat history to shelve file
+def save_chat_history(messages):
+    with shelve.open("chat_history") as db:
+        db["messages"] = messages
