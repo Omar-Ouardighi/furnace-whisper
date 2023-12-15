@@ -43,7 +43,7 @@ for msg in st.session_state.conversation:
     if msg["role"] == "user":
         st.chat_message(msg["role"]).write(msg["content"])
     else:
-        st.chat_message(msg["role"],avatar="PW LOGO.png").write(msg["content"])
+        st.chat_message(msg["role"]).write(msg["content"])
 
 if "chat_history" not in st.session_state: 
     st.session_state["chat_history"] = []
