@@ -21,7 +21,6 @@ This is a chatbot application built with Python and Streamlit. It uses OpenAI's 
 ## Requirements
 
 - Python 3.9 or later
-- Streamlit
 - OpenAI API key
 
 ## Docker Usage
