@@ -1,10 +1,7 @@
 import streamlit as st
-import openai
-from dotenv import load_dotenv
 from Chatbot import Chatbot
-import os
 import utils
-import shelve
+
 
 
 st.set_page_config(page_title="ChitChatPDF", page_icon="📄")
