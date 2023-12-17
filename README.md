@@ -51,7 +51,7 @@ Before running the app locally, you need to install the required Python packages
 
 2. Navigate to the project directory:
 ```
-  cd your-repository
+  cd ChitChatPDF
 ```
 
 3. Install the required packages using `pip`:
